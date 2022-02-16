@@ -8,7 +8,7 @@ use crate::{
 
 use borsh::{BorshDeserialize,BorshSerialize};
 use solana_program::{
-    account_info::{next_account_info,AccountInfo, self},
+    account_info::{next_account_info,AccountInfo},
     clock::Clock,
     entrypoint::ProgramResult,
     program_error::ProgramError,
@@ -106,7 +106,7 @@ impl Processor {
             return Err(StreamError::WithdrawError.into());
         }
         **escrow_account.try_borrow_mut_lamports()? -=data.amount;
-        **receiver_account.try_borrow_lamports()? += data.amount;
+        **receiver_account.try_borrow_mut_lamports()? += data.amount;
         escrow_data.lamports_withdrawn += data.amount;
 
         escrow_data.serialize(&mut &mut escrow_account.data.borrow_mut()[..])?;
